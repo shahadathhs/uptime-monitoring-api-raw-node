@@ -1,0 +1,48 @@
+import crypto from 'crypto';
+import environments from './environments';
+
+const utilities = {
+  // Parse JSON string to Object
+  parseJSON: (jsonString: string): Record<string, any> => {
+    let output: Record<string, any>;
+    try {
+      output = JSON.parse(jsonString);
+    } catch {
+      output = {};
+    }
+    return output;
+  },
+
+  // Hash a string using SHA256
+  hash: (str: string): string | false => {
+    if (typeof str === 'string' && str.length > 0) {
+      return crypto
+        .createHmac('sha256', environments.secretKey)
+        .update(str)
+        .digest('hex');
+    }
+    return false;
+  },
+
+  // Create a random alphanumeric string of a given length
+  createRandomString: (strLength: number): string | false => {
+    const length =
+      typeof strLength === 'number' && strLength > 0 ? strLength : false;
+
+    if (length) {
+      const possibleCharacters = 'abcdefghijklmnopqrstuvwxyz1234567890';
+      let output = '';
+      for (let i = 0; i < length; i++) {
+        const randomChar = possibleCharacters.charAt(
+          Math.floor(Math.random() * possibleCharacters.length),
+        );
+        output += randomChar;
+      }
+      return output;
+    }
+
+    return false;
+  },
+};
+
+export default utilities;
