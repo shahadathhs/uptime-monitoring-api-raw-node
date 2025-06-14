@@ -1,16 +1,19 @@
 {
   "name": "raw-node-api-project",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "NODE_ENV=staging nodemon ./src/index",
-    "production": "NODE_ENV=production nodemon ./src/index"
+    "start": "NODE_ENV=staging nodemon ./src/server",
+    "production": "NODE_ENV=production nodemon ./src/server"
   },
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",
   "description": "",
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }
