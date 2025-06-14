@@ -1,5 +1,5 @@
 import http, { IncomingMessage, ServerResponse } from 'http';
-import { handleReqRes } from '../helpers/handleReqRes';
+import reqResHandler from '../handlers/reqResHandler';
 
 interface ServerConfig {
   port: number;
@@ -24,7 +24,7 @@ const server: Server = {
     });
   },
 
-  handleReqRes: handleReqRes,
+  handleReqRes: reqResHandler.handler,
 
   init() {
     server.createServer();

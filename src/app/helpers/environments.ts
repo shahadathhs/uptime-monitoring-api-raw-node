@@ -1,12 +1,12 @@
 // Define the structure of the Twilio configuration
-interface TwilioConfig {
+export interface TwilioConfig {
   fromPhone: string;
   accountSid: string;
   authToken: string;
 }
 
 // Define the structure of each environment
-interface Environment {
+export interface EnvironmentConfig {
   port: number;
   envName: string;
   secretKey: string;
@@ -15,7 +15,7 @@ interface Environment {
 }
 
 // All environments
-const environments: Record<string, Environment> = {
+const environments: Record<string, EnvironmentConfig> = {
   staging: {
     port: 3000,
     envName: 'staging',
@@ -41,11 +41,7 @@ const environments: Record<string, Environment> = {
   },
 };
 
-// Determine which environment to export
-const currentEnvironment: string =
-  typeof process.env.NODE_ENV === 'string' ? process.env.NODE_ENV : 'staging';
+const currentEnv = process.env.NODE_ENV || 'staging';
+const environment = environments[currentEnv] || environments.staging;
 
-const environmentToExport: Environment =
-  environments[currentEnvironment] ?? environments.staging;
-
-export default environmentToExport;
+export default environment;

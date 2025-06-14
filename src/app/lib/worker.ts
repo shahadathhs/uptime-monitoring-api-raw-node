@@ -1,8 +1,8 @@
 import http, { IncomingMessage, RequestOptions } from 'http';
 import https from 'https';
 import url from 'url';
-import { sendTwilioSms } from '../helpers/notifications';
-import { parseJSON } from '../helpers/utilities';
+import notifications from '../helpers/notifications';
+import utilities from '../helpers/utilities';
 import data from './data';
 
 // Types
@@ -35,7 +35,9 @@ const worker = {
             check,
             (err2: string | false, originalCheckData?: string) => {
               if (!err2 && originalCheckData) {
-                worker.validateCheckData(parseJSON(originalCheckData));
+                worker.validateCheckData(
+                  utilities.parseJSON(originalCheckData),
+                );
               } else {
                 console.log('Error: reading one of the checks data!');
               }
@@ -166,13 +168,17 @@ const worker = {
   alertUserToStatusChange(newCheckData: CheckData): void {
     const msg = `Alert: Your check for ${newCheckData.method.toUpperCase()} ${newCheckData.protocol}://${newCheckData.url} is currently ${newCheckData.state}`;
 
-    sendTwilioSms(newCheckData.userPhone, msg, (err: string | false) => {
-      if (!err) {
-        console.log(`User was alerted to a status change via SMS: ${msg}`);
-      } else {
-        console.log('There was a problem sending SMS to one of the users!');
-      }
-    });
+    notifications.sendTwilioSms(
+      newCheckData.userPhone,
+      msg,
+      (err: string | false) => {
+        if (!err) {
+          console.log(`User was alerted to a status change via SMS: ${msg}`);
+        } else {
+          console.log('There was a problem sending SMS to one of the users!');
+        }
+      },
+    );
   },
 
   // Loop to run every minute

@@ -1,6 +1,6 @@
 import https from 'https';
 import querystring from 'querystring';
-import environmentToExport from './environments';
+import environment from './environments';
 
 // Define the callback type
 type Callback = (error: string | false) => void;
@@ -25,7 +25,7 @@ const notifications = {
     if (userPhone && userMsg) {
       // Configure the request payload
       const payload = {
-        From: environmentToExport.twilio.fromPhone,
+        From: environment.twilio.fromPhone,
         To: `+88${userPhone}`,
         Body: userMsg,
       };
@@ -36,8 +36,8 @@ const notifications = {
       const requestDetails = {
         hostname: 'api.twilio.com',
         method: 'POST',
-        path: `/2010-04-01/Accounts/${environmentToExport.twilio.accountSid}/Messages.json`,
-        auth: `${environmentToExport.twilio.accountSid}:${environmentToExport.twilio.authToken}`,
+        path: `/2010-04-01/Accounts/${environment.twilio.accountSid}/Messages.json`,
+        auth: `${environment.twilio.accountSid}:${environment.twilio.authToken}`,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },

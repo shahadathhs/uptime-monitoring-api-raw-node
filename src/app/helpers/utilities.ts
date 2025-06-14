@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import environments from './environments';
+import environment from './environments';
 
 const utilities = {
   // Parse JSON string to Object
@@ -17,7 +17,7 @@ const utilities = {
   hash: (str: string): string | false => {
     if (typeof str === 'string' && str.length > 0) {
       return crypto
-        .createHmac('sha256', environments.secretKey)
+        .createHmac('sha256', environment.secretKey)
         .update(str)
         .digest('hex');
     }

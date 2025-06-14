@@ -1,9 +1,9 @@
+import routes from '@/routes';
 import { IncomingHttpHeaders, IncomingMessage, ServerResponse } from 'http';
 import { StringDecoder } from 'string_decoder';
 import { parse } from 'url';
-import routes from '../../routes';
-import { notFoundHandler } from '../handlers/notFoundHandler';
-import { parseJSON } from './utilities';
+import utilities from '../helpers/utilities';
+import notFoundHandler from './notFoundHandler';
 
 // Define request properties interface
 interface RequestProperties {
@@ -23,8 +23,8 @@ type HandlerFunction = (
 ) => void;
 
 // module scaffolding
-const handler = {
-  handleReqRes: (req: IncomingMessage, res: ServerResponse): void => {
+const reqResHandler = {
+  handler: (req: IncomingMessage, res: ServerResponse): void => {
     // parse URL
     const parsedUrl = parse(req.url || '', true);
     const path = parsedUrl.pathname || '/';
@@ -48,7 +48,7 @@ const handler = {
     const chosenHandler: HandlerFunction =
       typeof routes[trimmedPath] === 'function'
         ? routes[trimmedPath]
-        : notFoundHandler;
+        : notFoundHandler.notFound;
 
     req.on('data', (buffer) => {
       realData += decoder.write(buffer);
@@ -57,7 +57,7 @@ const handler = {
     req.on('end', () => {
       realData += decoder.end();
 
-      requestProperties.body = parseJSON(realData);
+      requestProperties.body = utilities.parseJSON(realData);
 
       chosenHandler(requestProperties, (statusCode, payload) => {
         const finalStatusCode =
@@ -75,4 +75,4 @@ const handler = {
   },
 };
 
-export default handler;
+export default reqResHandler;
